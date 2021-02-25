@@ -278,9 +278,14 @@ public class SpringApplication {
 	public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySources) {
 		this.resourceLoader = resourceLoader;
 		Assert.notNull(primarySources, "PrimarySources must not be null");
+		// 主类进行包裹
 		this.primarySources = new LinkedHashSet<>(Arrays.asList(primarySources));
+		// 推断出SERVLET
+		// 内置写死一些类，在classpath扫描这些类，如果存在，说明是servlet
+		// 比如javax.servlet.Servlet
 		this.webApplicationType = WebApplicationType.deduceFromClasspath();
 		this.bootstrappers = new ArrayList<>(getSpringFactoriesInstances(Bootstrapper.class));
+		//
 		setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
 		setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
 		this.mainApplicationClass = deduceMainApplicationClass();
